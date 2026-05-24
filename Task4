@@ -1,0 +1,120 @@
+Here’s a structured design for your **Hotel Room Booking & Management System in Java** using OOP principles and persistence via database or file I/O:
+
+---
+
+### 🧩 1. Core Features
+- **Room Categorization**: Standard, Deluxe, Suite.  
+- **Reservation Management**: Make and cancel bookings.  
+- **Payment Simulation**: Simple confirmation of payment.  
+- **Booking Details View**: Show reservation info.  
+- **Persistence**: Store data in a database (MySQL/SQLite) or text/CSV file.  
+
+---
+
+### 💻 2. Class Design (OOP)
+```java
+// Room.java
+public class Room {
+    private int roomId;
+    private String category; // Standard, Deluxe, Suite
+    private boolean isAvailable;
+
+    public Room(int roomId, String category) {
+        this.roomId = roomId;
+        this.category = category;
+        this.isAvailable = true;
+    }
+
+    // getters and setters
+}
+
+// Reservation.java
+public class Reservation {
+    private int reservationId;
+    private String customerName;
+    private Room room;
+    private String checkInDate;
+    private String checkOutDate;
+
+    public Reservation(int reservationId, String customerName, Room room,
+                       String checkInDate, String checkOutDate) {
+        this.reservationId = reservationId;
+        this.customerName = customerName;
+        this.room = room;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+    }
+
+    // getters and setters
+}
+```
+
+---
+
+### ⚙️ 3. Booking Logic
+```java
+import java.util.*;
+
+public class HotelSystem {
+    private List<Room> rooms = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
+    private int reservationCounter = 1;
+
+    public HotelSystem() {
+        // Initialize rooms
+        rooms.add(new Room(101, "Standard"));
+        rooms.add(new Room(102, "Deluxe"));
+        rooms.add(new Room(103, "Suite"));
+    }
+
+    public void makeReservation(String customer, String category, String checkIn, String checkOut) {
+        for (Room r : rooms) {
+            if (r.getCategory().equalsIgnoreCase(category) && r.isAvailable()) {
+                r.setAvailable(false);
+                Reservation res = new Reservation(reservationCounter++, customer, r, checkIn, checkOut);
+                reservations.add(res);
+                System.out.println("Reservation successful! ID: " + res.getReservationId());
+                return;
+            }
+        }
+        System.out.println("No available rooms in category: " + category);
+    }
+
+    public void cancelReservation(int reservationId) {
+        for (Reservation res : reservations) {
+            if (res.getReservationId() == reservationId) {
+                res.getRoom().setAvailable(true);
+                reservations.remove(res);
+                System.out.println("Reservation cancelled successfully.");
+                return;
+            }
+        }
+        System.out.println("Reservation not found.");
+    }
+
+    public void viewReservations() {
+        for (Reservation res : reservations) {
+            System.out.println("ID: " + res.getReservationId() +
+                               ", Customer: " + res.getCustomerName() +
+                               ", Room: " + res.getRoom().getCategory() +
+                               ", Dates: " + res.getCheckInDate() + " to " + res.getCheckOutDate());
+        }
+    }
+
+    public void simulatePayment(int reservationId) {
+        System.out.println("Payment processed for reservation ID: " + reservationId);
+    }
+}
+```
+
+---
+
+### 📂 4. Persistence Options
+- **File I/O**: Save reservations to a CSV or text file using `FileWriter` and reload with `BufferedReader`.  
+- **Database (MySQL/SQLite)**: Store rooms and reservations in tables. Use JDBC for CRUD operations.  
+
+---
+
+### 🎨 5. Interface Options
+- **Console-based**: Simple `Scanner` input/output.  
+- **GUI-based (Swing/JavaFX)**: Create forms for booking, cancellation, and viewing reservation.
