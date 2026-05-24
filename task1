@@ -1,0 +1,90 @@
+Here’s a clear way to tackle **V Task 1: Student Grade Tracker** in Java. I’ll show you a simple **console-based program** using arrays/ArrayLists to input grades, calculate statistics, and display a summary report.
+
+---
+
+### 📝 Step-by-Step Plan
+1. **Input student names and grades** (via Scanner).  
+2. **Store data** in an `ArrayList` or array.  
+3. **Calculate statistics**:
+   - Average score  
+   - Highest score  
+   - Lowest score  
+4. **Display summary report** with all students and results.  
+
+---
+
+### 💻 Sample Java Code (Console-Based)
+
+```java
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Student {
+    String name;
+    int grade;
+
+    Student(String name, int grade) {
+        this.name = name;
+        this.grade = grade;
+    }
+}
+
+public class StudentGradeTracker {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+        sc.nextLine(); // consume newline
+
+        // Input student data
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter student name: ");
+            String name = sc.nextLine();
+            System.out.print("Enter grade: ");
+            int grade = sc.nextInt();
+            sc.nextLine(); // consume newline
+            students.add(new Student(name, grade));
+        }
+
+        // Calculate statistics
+        int total = 0;
+        int highest = Integer.MIN_VALUE;
+        int lowest = Integer.MAX_VALUE;
+
+        for (Student s : students) {
+            total += s.grade;
+            if (s.grade > highest) highest = s.grade;
+            if (s.grade < lowest) lowest = s.grade;
+        }
+
+        double average = (double) total / students.size();
+
+        // Display summary report
+        System.out.println("\n--- Student Grade Report ---");
+        for (Student s : students) {
+            System.out.println(s.name + " : " + s.grade);
+        }
+        System.out.println("Average Score: " + average);
+        System.out.println("Highest Score: " + highest);
+        System.out.println("Lowest Score: " + lowest);
+
+        sc.close();
+    }
+}
+```
+
+---
+
+### ⚙️ How It Works
+- You enter the number of students.  
+- For each student, input their name and grade.  
+- Program calculates **average, highest, lowest**.  
+- Prints a neat summary report.  
+
+---
+
+### 🚀 Extensions
+- Add a **GUI** using Java Swing or JavaFX for a more interactive tracker.  
+- Store data in a **file or database** for persistence.  
